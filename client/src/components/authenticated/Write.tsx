@@ -16,8 +16,6 @@ const Write = () => {
   const [wrongData, setWrongData] = useState<Card[]>([]);
   // Houses incorrect definition terms
   const [wrongDataSet, setWrongDataSet] = useState(new Set<string>());
-  // Handles Overwritten Feature
-  const [isOverwritten, setIsOverwritten] = useState(false);
 
   useEffect(() => {
     const handleTab = (e: any) => {
@@ -36,7 +34,6 @@ const Write = () => {
 
     setCheckValue(true);
     setInputValue("");
-    setIsOverwritten(true);
     setPlaceholder(`Overwritten to ${cards[index].definition}`);
   };
 
@@ -49,7 +46,6 @@ const Write = () => {
   const handleCardReset = () => {
     setInputValue("");
     setCheckValue(null);
-    setIsOverwritten(false);
     setPlaceholder("");
   };
 

@@ -24,7 +24,7 @@ function RigelApp() {
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
-      <div className="star"></div>;
+      <div className="star"></div>
     </>
   );
 }

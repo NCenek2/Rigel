@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import useAuthService from "../hooks/services/useAuthService";
+import { ROUTE_PREFIX } from "../constants";
 
 export type LoginInfo = {
   email: string;
@@ -68,7 +69,10 @@ const Login = () => {
           </button>
         </form>
         <div className="login-links">
-          <Link to="/register" className="btn btn-link text-decoration-none">
+          <Link
+            to={`${ROUTE_PREFIX}/register`}
+            className="btn btn-link text-decoration-none"
+          >
             Register
           </Link>
           <Link to="" className="btn btn-link text-decoration-none">

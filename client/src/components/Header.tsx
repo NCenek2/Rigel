@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import useAuth from "../hooks/useAuth";
+import { ROUTE_PREFIX } from "../constants";
 
 const Header = () => {
   const { auth, setAuth } = useAuth();
@@ -8,7 +9,7 @@ const Header = () => {
   return (
     <nav className="navbar navbar-dark header-color sticky-top">
       <div className="container-fluid">
-        <Link className="navbar-brand" to="/">
+        <Link className="navbar-brand" to={`${ROUTE_PREFIX}/`}>
           Rigel
         </Link>
         <button
@@ -45,7 +46,7 @@ const Header = () => {
                   <Link
                     className="nav-link white-smoke"
                     aria-current="page"
-                    to="/"
+                    to={`${ROUTE_PREFIX}/`}
                   >
                     Home
                   </Link>
@@ -57,7 +58,7 @@ const Header = () => {
                     <Link
                       className="nav-link white-smoke"
                       aria-current="page"
-                      to="/main"
+                      to={`${ROUTE_PREFIX}/main`}
                     >
                       Main
                     </Link>
@@ -70,14 +71,17 @@ const Header = () => {
                     <Link
                       className="nav-link white-smoke"
                       onClick={() => setAuth(null)}
-                      to="/login"
+                      to={`${ROUTE_PREFIX}/login`}
                     >
                       Log Out
                     </Link>
                   </button>
                 ) : (
                   <button className="nav-link" data-bs-dismiss="offcanvas">
-                    <Link className="nav-link white-smoke" to="/login">
+                    <Link
+                      className="nav-link white-smoke"
+                      to={`${ROUTE_PREFIX}/login`}
+                    >
                       Login
                     </Link>
                   </button>

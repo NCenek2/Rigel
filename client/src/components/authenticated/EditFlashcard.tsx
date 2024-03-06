@@ -50,7 +50,7 @@ const EditFlashcard = ({
     // For cases where we are not using an existing id
     if (card_id === -1) {
       setCards((prevCards) =>
-        prevCards.filter((card, index) => index !== card_index)
+        prevCards.filter((_, index) => index !== card_index)
       );
     } else {
       // For Cases where we are deleting a card with an id
