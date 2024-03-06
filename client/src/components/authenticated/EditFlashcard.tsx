@@ -1,11 +1,11 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { Card } from "../../contexts/DeckContext";
 import { CARD_DEFINITION_LENGTH, CARD_TERM_LENGTH } from "../../constants";
+import useMode from "../../hooks/useMode";
 
 type EditFlashCardProps = {
   setMadeChanges: Dispatch<SetStateAction<boolean>>;
   card_index: number;
-  setCards: Dispatch<SetStateAction<Card[]>>;
   setDeletedSet: Dispatch<SetStateAction<Set<number>>>;
   updatedSet: Set<number>;
   setUpdatedSet: Dispatch<SetStateAction<Set<number>>>;
@@ -16,30 +16,30 @@ const EditFlashcard = ({
   term,
   definition,
   card_index,
-  setCards,
   setDeletedSet,
   updatedSet,
   setUpdatedSet,
   setMadeChanges,
 }: Card & EditFlashCardProps) => {
+  const { setCards } = useMode();
   const handleChange = (
-    event:
+    e:
       | React.ChangeEvent<HTMLInputElement>
       | React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     setMadeChanges(true);
 
     if (card_id !== -1 && !updatedSet.has(card_id)) {
-      setUpdatedSet((prevUpdatedSet) => {
+      setUpdatedSet((prevUpdatedSet: Set<number>) => {
         prevUpdatedSet.add(card_id);
         return prevUpdatedSet;
       });
     }
 
-    const { id, value } = event.target;
+    const { id, value } = e.target;
 
     setCards((prevCards) => {
-      const newCards: any = [...prevCards];
+      const newCards: Card[] = [...prevCards];
       newCards[card_index][id] = value;
       return [...newCards];
     });
@@ -55,20 +55,20 @@ const EditFlashcard = ({
     } else {
       // For Cases where we are deleting a card with an id
       setCards((prevCards) =>
-        prevCards.filter((card, index) => card.card_id !== card_id)
+        prevCards.filter((card) => card.card_id !== card_id)
       );
 
       if (updatedSet.has(card_id)) {
         // Removes those that are updated to allow for an
         // easier distribution when i send the data to
         // server.
-        setUpdatedSet((prevUpdatedSet) => {
+        setUpdatedSet((prevUpdatedSet: Set<number>) => {
           prevUpdatedSet.delete(card_id);
           return prevUpdatedSet;
         });
       }
 
-      setDeletedSet((prevSet) => {
+      setDeletedSet((prevSet: Set<number>) => {
         prevSet.add(card_id);
         return prevSet;
       });

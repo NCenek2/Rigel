@@ -1,16 +1,15 @@
 import React from "react";
-import { CardProvider } from "../../contexts/DeckContext";
+import { DeckProvider } from "../../contexts/DeckContext";
 import MainSwitch from "./MainSwitch";
 import { ModeProvider } from "../../contexts/ModeContext";
-import Decks from "./Decks";
 
 const Main = () => {
   return (
-    <CardProvider>
+    <DeckProvider>
       <ModeProvider>
         <MainSwitch />
       </ModeProvider>
-    </CardProvider>
+    </DeckProvider>
   );
 };
 

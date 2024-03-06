@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import axios from "../api/axios";
-import { AuthContextType } from "../contexts/AuthContext";
-import useAuth from "../hooks/useAuth";
-import ErrorAlert from "./authenticated/ErrorAlert";
+import { Link } from "react-router-dom";
+import useAuthService from "../hooks/services/useAuthService";
 
-type LoginInfo = {
+export type LoginInfo = {
   email: string;
   password: string;
 };
@@ -16,15 +13,9 @@ const LOGIN_DATA: LoginInfo = {
 };
 
 const Login = () => {
-  const { setAuth } = useAuth() as AuthContextType;
-
-  const [errorMessage, setErrorMessage] = useState("");
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const { login } = useAuthService();
 
   const [loginInfo, setLoginInfo] = useState<LoginInfo>(LOGIN_DATA);
-  const navigate = useNavigate();
-  const location = useLocation();
-  const from = location?.state?.from?.pathname || "/main";
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -39,47 +30,11 @@ const Login = () => {
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    login();
+    await login(loginInfo);
   };
 
-  const login = async () => {
-    try {
-      const result = await axios({
-        url: "/auth/login",
-        method: "post",
-        data: loginInfo,
-      });
-
-      if (result?.status === 200) {
-        setShowErrorMessage(false);
-        setAuth(result.data);
-        navigate(from, { replace: true });
-      }
-    } catch (err: any) {
-      if (err?.response?.status) {
-        setShowErrorMessage(true);
-        if (err?.response?.status === 400) {
-          setErrorMessage("Missing Username or Password!");
-        } else if (err?.response?.status === 401) {
-          setErrorMessage("Unauthorized!");
-        } else {
-          setErrorMessage("Login Failed!");
-        }
-      } else {
-        setErrorMessage("Cannot Connect to the Server!");
-      }
-      return err.response;
-    }
-  };
   return (
     <>
-      {showErrorMessage && (
-        <ErrorAlert
-          errorMessage={errorMessage}
-          setShowErrorMessage={setShowErrorMessage}
-        />
-      )}
       <div className="login-container">
         <form onSubmit={handleSubmit}>
           <label htmlFor="email" className="form-label">

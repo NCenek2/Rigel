@@ -1,10 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { AuthContextType } from "../contexts/AuthContext";
 import useAuth from "../hooks/useAuth";
 
 const Header = () => {
-  const { auth, setAuth } = useAuth() as AuthContextType;
+  const { auth, setAuth } = useAuth();
 
   return (
     <nav className="navbar navbar-dark header-color sticky-top">
@@ -42,38 +41,46 @@ const Header = () => {
           <div className="offcanvas-body">
             <ul className="navbar-nav justify-content-end flex-grow-1 pe-3">
               <li className="nav-item">
-                <Link
-                  className="nav-link white-smoke"
-                  aria-current="page"
-                  to="/"
-                >
-                  Home
-                </Link>
-              </li>
-              {auth && (
-                <li className="nav-item">
+                <button className="nav-link" data-bs-dismiss="offcanvas">
                   <Link
                     className="nav-link white-smoke"
                     aria-current="page"
-                    to="/main"
+                    to="/"
                   >
-                    Main
+                    Home
                   </Link>
+                </button>
+              </li>
+              {auth && (
+                <li className="nav-item">
+                  <button className="nav-link" data-bs-dismiss="offcanvas">
+                    <Link
+                      className="nav-link white-smoke"
+                      aria-current="page"
+                      to="/main"
+                    >
+                      Main
+                    </Link>
+                  </button>
                 </li>
               )}
               <li className="nav-item">
                 {auth ? (
-                  <Link
-                    className="nav-link white-smoke"
-                    onClick={() => setAuth(null)}
-                    to="/login"
-                  >
-                    Log Out
-                  </Link>
+                  <button className="nav-link" data-bs-dismiss="offcanvas">
+                    <Link
+                      className="nav-link white-smoke"
+                      onClick={() => setAuth(null)}
+                      to="/login"
+                    >
+                      Log Out
+                    </Link>
+                  </button>
                 ) : (
-                  <Link className="nav-link white-smoke" to="/login">
-                    Login
-                  </Link>
+                  <button className="nav-link" data-bs-dismiss="offcanvas">
+                    <Link className="nav-link white-smoke" to="/login">
+                      Login
+                    </Link>
+                  </button>
                 )}
               </li>
             </ul>

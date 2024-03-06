@@ -2,11 +2,10 @@ import { axiosPrivate } from "../api/axios";
 import { useEffect } from "react";
 import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
-import { AuthContextType } from "../contexts/AuthContext";
 
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken();
-  const { auth } = useAuth() as AuthContextType;
+  const { auth } = useAuth();
 
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
@@ -27,7 +26,7 @@ const useAxiosPrivate = () => {
           prevRequest.sent = true; // Prevents multiple retries
           // response?.data?.accessToken
           const newAccessToken = await refresh();
-          
+
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return axiosPrivate(prevRequest);
         }

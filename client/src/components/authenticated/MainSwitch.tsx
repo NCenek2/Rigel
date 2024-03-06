@@ -2,14 +2,12 @@ import React from "react";
 import StudyCards from "./StudyCards";
 import Decks from "./Decks";
 import Write from "./Write";
-import useModeContext, {
-  ModeContextType,
-  ModeEnum,
-} from "../../contexts/ModeContext";
+import { ModeEnum } from "../../contexts/ModeContext";
 import EditFlashCards from "./EditFlashcards";
+import useMode from "../../hooks/useMode";
 
 const MainSwitch = () => {
-  const { mode } = useModeContext() as ModeContextType;
+  const { mode } = useMode();
 
   return (
     <main className="quizlet-container">

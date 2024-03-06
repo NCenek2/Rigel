@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { ReactNode, createContext, useState } from "react";
 
 type User = {
   user_id: number;
@@ -15,13 +15,27 @@ export type AuthContextType = {
   setAuth: React.Dispatch<React.SetStateAction<Token | null>>;
 };
 
-const AuthContext = createContext<AuthContextType | null>(null);
-
-export const AuthProvider = ({ children }: any) => {
+const useAuthContext = () => {
   const [auth, setAuth] = useState<Token | null>(null);
+  return { auth, setAuth };
+};
 
+export type UseAuthContextType = ReturnType<typeof useAuthContext>;
+
+const useAuthContextType = {
+  auth: null,
+  setAuth: () => {},
+};
+
+const AuthContext = createContext<UseAuthContextType>(useAuthContextType);
+
+type ChildrenType = {
+  children?: ReactNode | ReactNode[];
+};
+
+export const AuthProvider = ({ children }: ChildrenType) => {
   return (
-    <AuthContext.Provider value={{ auth, setAuth }}>
+    <AuthContext.Provider value={useAuthContext()}>
       {children}
     </AuthContext.Provider>
   );

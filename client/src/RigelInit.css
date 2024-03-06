@@ -102,3 +102,13 @@ body {
 .btn.btn-ddark:hover {
   background-color: hsl(240, 50%, 65%);
 }
+
+/* Alert */
+.alert-comp {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: 100%;
+  max-width: 250px;
+}

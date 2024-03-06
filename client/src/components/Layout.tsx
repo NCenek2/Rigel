@@ -1,13 +1,15 @@
 import React from "react";
 import { Outlet } from "react-router";
 import Header from "./Header";
+import Alert from "./Alert";
 
 const Layout = () => {
   return (
-    <React.Fragment>
+    <>
       <Header />
+      <Alert />
       <Outlet />
-    </React.Fragment>
+    </>
   );
 };
 

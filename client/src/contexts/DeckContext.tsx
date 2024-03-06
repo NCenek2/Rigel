@@ -1,13 +1,14 @@
 import React, {
   createContext,
-  useContext,
   useState,
   useEffect,
   Dispatch,
   SetStateAction,
+  ReactNode,
 } from "react";
 import { useNavigate, useLocation } from "react-router";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
+import useHandleError from "../hooks/useHandleError";
 
 type ViewDecksResponse = {
   user_id: number;
@@ -23,7 +24,12 @@ type AllDeckInfoResponse = {
   definition: string;
 };
 
-export type Card = { card_id: number; term: string; definition: string };
+export type Card = {
+  [key: string]: any;
+  card_id: number;
+  term: string;
+  definition: string;
+};
 
 export type NewCard = {
   deck_id: number;
@@ -77,21 +83,14 @@ export const organizeData = (
   return output;
 };
 
-const DeckContext = createContext<DeckContextType | null>(null);
-
 const useDeckContext = () => {
-  return useContext(DeckContext);
-};
-
-export const CardProvider = ({ children }: any) => {
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const location = useLocation();
+  const handleError = useHandleError();
   const [decks, setDecks] = useState<DeckData[]>([]);
 
   useEffect(() => {
-    let isMounted = true;
-
     const refresh = async () => {
       try {
         const [decksReponse, deckInfoReponse] = await Promise.all([
@@ -101,23 +100,37 @@ export const CardProvider = ({ children }: any) => {
 
         setDecks(organizeData(decksReponse.data, deckInfoReponse.data));
       } catch (err) {
-        console.error(err);
+        handleError(err);
         navigate("/login", { state: { from: location }, replace: true });
       }
     };
 
     refresh();
-
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
+  return { decks, setDecks };
+};
+
+export type UseDeckContextType = ReturnType<typeof useDeckContext>;
+
+const useDeckContextType: UseDeckContextType = {
+  decks: [],
+  setDecks: () => {},
+};
+
+export const DeckContext =
+  createContext<UseDeckContextType>(useDeckContextType);
+
+type ChildrenType = {
+  children?: ReactNode | ReactNode[];
+};
+
+export const DeckProvider = ({ children }: ChildrenType) => {
   return (
-    <DeckContext.Provider value={{ decks, setDecks }}>
+    <DeckContext.Provider value={useDeckContext()}>
       {children}
     </DeckContext.Provider>
   );
 };
 
-export default useDeckContext;
+export default DeckProvider;

@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import useMode from "../../hooks/useMode";
 import { Card } from "../../contexts/DeckContext";
-import useModeContext, { ModeContextType } from "../../contexts/ModeContext";
-
 const Write = () => {
-  const { exitSession, cards, setCards } = useModeContext() as ModeContextType;
+  const { exitSession, cards, setCards } = useMode();
 
   // Index keeps index of the card
   const [index, setIndex] = useState(0);
@@ -20,7 +19,7 @@ const Write = () => {
   // Handles Overwritten Feature
   const [isOverwritten, setIsOverwritten] = useState(false);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const handleTab = (e: any) => {
       if (e.key === "Tab") e.preventDefault();
     };

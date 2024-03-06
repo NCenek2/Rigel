@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router";
-import "./App.css";
-import "./Quizlet.css";
+import "./RigelInit.css";
+import "./Rigel.css";
 import Layout from "./components/Layout";
 import Home from "./components/Home";
 import Main from "./components/authenticated/Main";
@@ -10,9 +10,9 @@ import NotFound from "./components/NotFound";
 import RequireAuth from "./components/RequireAuth";
 import Register from "./components/Register";
 
-function App() {
+function RigelApp() {
   return (
-    <React.Fragment>
+    <>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route path="/" element={<Home />} />
@@ -25,8 +25,8 @@ function App() {
         </Route>
       </Routes>
       <div className="star"></div>;
-    </React.Fragment>
+    </>
   );
 }
 
-export default App;
+export default RigelApp;

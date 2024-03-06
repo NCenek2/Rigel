@@ -1,35 +1,29 @@
 import React, { useState } from "react";
 import EditFlashcard from "./EditFlashcard";
-import useDeckContext, {
-  DeckContextType,
-  Card,
-  NewCard,
-} from "../../contexts/DeckContext";
-import ErrorAlert from "./ErrorAlert";
-import useModeContext, { ModeContextType } from "../../contexts/ModeContext";
-import useUpdateDecks from "../../hooks/useUpdateDecks";
 import {
   CARD_DEFINITION_LENGTH,
   CARD_TERM_LENGTH,
   DECK_NAME_LENGTH,
 } from "../../constants";
+import useMode from "../../hooks/useMode";
+import useDeck from "../../hooks/useDeck";
+import { Card, NewCard } from "../../contexts/DeckContext";
+import useDeckService from "../../hooks/services/useDeckService";
+import { useAlert } from "../../hooks/useAlert";
 
 const EditFlashCards = () => {
-  const { decks } = useDeckContext() as DeckContextType;
-  const { currentDeckId, exitSession, cards, setCards } =
-    useModeContext() as ModeContextType;
-  const update = useUpdateDecks();
+  const { decks } = useDeck();
+  const { currentDeckId, exitSession, cards, setCards } = useMode();
+  const { updateDecks } = useDeckService();
   const [madeChanges, setMadeChanges] = useState(false);
-
-  const [errorMessage, setErrorMessage] = useState("");
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const { setAlert } = useAlert();
 
   const [deckTitle, setDeckTitle] = useState(
     currentDeckId !== null ? decks[currentDeckId].deck_name : ""
   );
 
-  const [updatedSet, setUpdatedSet] = useState(new Set<number>());
-  const [deletedSet, setDeletedSet] = useState(new Set<number>());
+  const [updatedSet, setUpdatedSet] = useState<Set<number>>(new Set<number>());
+  const [deletedSet, setDeletedSet] = useState<Set<number>>(new Set<number>());
 
   if (currentDeckId == null) {
     return <h1>Deck Id is null</h1>;
@@ -41,8 +35,7 @@ const EditFlashCards = () => {
     );
 
     if (incompleteCards) {
-      setErrorMessage("Card Term and Definitions cannot be empty");
-      setShowErrorMessage(true);
+      setAlert("Card Term and Definitions cannot be empty");
     }
     return incompleteCards;
   };
@@ -51,8 +44,7 @@ const EditFlashCards = () => {
     const exceedsLength = deckTitle.length > DECK_NAME_LENGTH;
 
     if (exceedsLength) {
-      setErrorMessage(`Deck name cannot exceed ${DECK_NAME_LENGTH} characters`);
-      setShowErrorMessage(true);
+      setAlert(`Deck name cannot exceed ${DECK_NAME_LENGTH} characters`);
     }
 
     return exceedsLength;
@@ -64,7 +56,7 @@ const EditFlashCards = () => {
     for (let card of cards) {
       if (card.term.length > CARD_TERM_LENGTH) {
         cardLengthExceeded = true;
-        setErrorMessage(
+        setAlert(
           `Card with term '${card.term}' exceeds the term length of ${CARD_TERM_LENGTH} `
         );
         break;
@@ -72,14 +64,13 @@ const EditFlashCards = () => {
 
       if (card.definition.length > CARD_DEFINITION_LENGTH) {
         cardLengthExceeded = true;
-        setErrorMessage(
+        setAlert(
           `Card with term '${card.term}' exceeds the defintion length of ${CARD_DEFINITION_LENGTH} `
         );
         break;
       }
     }
 
-    if (cardLengthExceeded) setShowErrorMessage(true);
     return cardLengthExceeded;
   };
 
@@ -105,7 +96,7 @@ const EditFlashCards = () => {
     setCards((prev) => [...prev, newCard]);
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if (
       hasIncompleteCards() ||
       titleExceedsLength() ||
@@ -133,14 +124,13 @@ const EditFlashCards = () => {
     }
 
     const deckData = { deck_id, deck_name: deckTitle, deck_name_old };
-    update({ deckData, deleted, updated, created });
+    await updateDecks({ deckData, deleted, updated, created });
     setMadeChanges(false);
-    setShowErrorMessage(false);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMadeChanges(true);
-    setDeckTitle((prevTitle) => e.target.value);
+    setDeckTitle(e.target.value);
   };
 
   return (
@@ -148,12 +138,6 @@ const EditFlashCards = () => {
       <button className="btn btn-outline-light add-deck" onClick={exitSession}>
         Home
       </button>
-      {showErrorMessage && (
-        <ErrorAlert
-          errorMessage={errorMessage}
-          setShowErrorMessage={setShowErrorMessage}
-        />
-      )}
       {madeChanges && (
         <button className="btn add-color update-btn" onClick={handleUpdate}>
           Update
@@ -181,7 +165,6 @@ const EditFlashCards = () => {
               card_id={card_id}
               card_index={index}
               setMadeChanges={setMadeChanges}
-              setCards={setCards}
               setDeletedSet={setDeletedSet}
               updatedSet={updatedSet}
               setUpdatedSet={setUpdatedSet}

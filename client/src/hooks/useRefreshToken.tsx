@@ -1,9 +1,8 @@
 import axios from "../api/axios";
-import { AuthContextType } from "../contexts/AuthContext";
 import useAuth from "./useAuth";
 
 const useRefreshToken = () => {
-  const { setAuth } = useAuth() as AuthContextType;
+  const { setAuth } = useAuth();
 
   const refresh = async () => {
     const response = await axios.get("/refresh", {

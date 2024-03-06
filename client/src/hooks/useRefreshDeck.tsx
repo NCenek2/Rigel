@@ -1,13 +1,10 @@
-import { axiosPrivate } from "../api/axios";
-import useDeckContext, {
-  DeckContextType,
-  organizeData,
-} from "../contexts/DeckContext";
+import { organizeData } from "../contexts/DeckContext";
 import { useNavigate, useLocation } from "react-router";
 import useAxiosPrivate from "./useAxiosPrivate";
+import useDeck from "./useDeck";
 
 const useRefreshDeck = () => {
-  const { setDecks } = useDeckContext() as DeckContextType;
+  const { setDecks } = useDeck();
   const axiosPrivate = useAxiosPrivate();
   const navigate = useNavigate();
   const location = useLocation();

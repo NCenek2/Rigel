@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useMultistepForm } from "../hooks/useMultistepForm";
 import { EmailForm } from "./signin_forms/EmailForm";
 import { PasswordForm } from "./signin_forms/PasswordForm";
 import { Password2Form } from "./signin_forms/Password2Form";
-import axios from "../api/axios";
-import ErrorAlert from "./authenticated/ErrorAlert";
+import { useAlert } from "../hooks/useAlert";
+import useUserService from "../hooks/services/useUserService";
 
 type FormData = {
   email: string;
@@ -21,9 +20,8 @@ const INITIAL_DATA: FormData = {
 
 const SignUp = () => {
   const [data, setData] = useState(INITIAL_DATA);
-  const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState("");
-  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const { setAlert } = useAlert();
+  const { register } = useUserService();
 
   function updateFields(fields: Partial<FormData>) {
     setData((prev) => {
@@ -38,64 +36,27 @@ const SignUp = () => {
       <Password2Form {...data} updateFields={updateFields} />,
     ]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isLastStep) {
       return next();
     }
 
     if (data.password !== data.password2) {
-      setErrorMessage("Passwords do not match");
-      setShowErrorMessage(true);
+      setAlert("Passwords do not match");
       return;
     }
 
     if (data.password.length < 10) {
-      setErrorMessage("Password is less than 10 character");
-      setShowErrorMessage(true);
+      setAlert("Password is less than 10 character");
       return;
     }
-
-    setShowErrorMessage(false);
-    register();
-  };
-
-  const register = async (): Promise<any> => {
     const { email, password } = data;
-
-    try {
-      const result = await axios({
-        url: "/register",
-        method: "post",
-        data: { email, password },
-      });
-
-      if (result?.status === 201) {
-        navigate("/login");
-      }
-    } catch (err: any) {
-      if (err?.response?.status) {
-        setShowErrorMessage(true);
-        if (err?.response?.status === 409) {
-          setErrorMessage("User with that email alreadye exists");
-        } else {
-          setErrorMessage("Server is having problems. Try again later!");
-        }
-      } else {
-        setErrorMessage("Cannot Connect to the Server! Check Connection.");
-      }
-      return err.response;
-    }
+    await register(email, password);
   };
 
   return (
     <>
-      {showErrorMessage && (
-        <ErrorAlert
-          errorMessage={errorMessage}
-          setShowErrorMessage={setShowErrorMessage}
-        />
-      )}
       <div className="form-container">
         <div
           style={{

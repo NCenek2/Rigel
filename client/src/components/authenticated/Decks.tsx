@@ -1,35 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import Deck from "./Deck";
-import useDeckContext, {
-  DeckContextType,
-  DeckData,
-} from "../../contexts/DeckContext";
-import { DECK_NAME_LENGTH } from "../../constants";
-import { axiosPrivate } from "../../api/axios";
-import useRefreshDeck from "../../hooks/useRefreshDeck";
+import { DeckData } from "../../contexts/DeckContext";
+import useDeck from "../../hooks/useDeck";
+import useDeckService from "../../hooks/services/useDeckService";
 const Decks = () => {
-  const { decks } = useDeckContext() as DeckContextType;
-  const refresh = useRefreshDeck();
-
-  const [showError, setShowError] = useState(false);
-  const [errorMessage, SetErrorMessage] = useState("");
+  const { decks } = useDeck();
+  const { addDeck } = useDeckService();
 
   const handleDeckCreation = async () => {
-    const newDeckName = `Deck ${decks.length + 1}`;
-
-    try {
-      const response = await axiosPrivate({
-        url: "/decks",
-        method: "post",
-        data: { deck_name: newDeckName },
-      });
-      if (response?.status === 201) {
-        setShowError(false);
-        refresh();
-      }
-    } catch (err: any) {
-      SetErrorMessage(err?.message);
-    }
+    addDeck();
   };
 
   return (
