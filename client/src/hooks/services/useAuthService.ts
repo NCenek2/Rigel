@@ -3,13 +3,14 @@ import axios from "../../api/axios";
 import { LoginInfo } from "../../components/Login";
 import useAuth from "../useAuth";
 import useHandleError from "../useHandleError";
+import { ROUTE_PREFIX } from "../../constants";
 
 const useAuthService = () => {
   const { setAuth } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const handleError = useHandleError();
-  const from = location?.state?.from?.pathname || "/main";
+  const from = location?.state?.from?.pathname || `${ROUTE_PREFIX}/main`;
 
   const login = async (loginInfo: LoginInfo) => {
     try {

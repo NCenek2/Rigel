@@ -2,6 +2,7 @@ import { organizeData } from "../contexts/DeckContext";
 import { useNavigate, useLocation } from "react-router";
 import useAxiosPrivate from "./useAxiosPrivate";
 import useDeck from "./useDeck";
+import { ROUTE_PREFIX } from "../constants";
 
 const useRefreshDeck = () => {
   const { setDecks } = useDeck();
@@ -18,7 +19,10 @@ const useRefreshDeck = () => {
       setDecks(organizeData(decksReponse.data, deckInfoReponse.data));
     } catch (err) {
       console.error(err);
-      navigate("/login", { state: { from: location }, replace: true });
+      navigate(`${ROUTE_PREFIX}/login`, {
+        state: { from: location },
+        replace: true,
+      });
     }
   };
 

@@ -5,6 +5,7 @@ import { PasswordForm } from "./signin_forms/PasswordForm";
 import { Password2Form } from "./signin_forms/Password2Form";
 import { useAlert } from "../hooks/useAlert";
 import useUserService from "../hooks/services/useUserService";
+import { DECK_MIN_LENGTH } from "../constants";
 
 type FormData = {
   email: string;
@@ -42,17 +43,24 @@ const SignUp = () => {
       return next();
     }
 
-    if (data.password !== data.password2) {
+    const { email, password, password2 } = data;
+
+    if (email.trim() === "") {
+      setAlert("Email cannot be empty");
+      return;
+    }
+
+    if (password.trim() !== password2.trim()) {
       setAlert("Passwords do not match");
       return;
     }
 
-    if (data.password.length < 10) {
-      setAlert("Password is less than 10 character");
+    if (password.length < DECK_MIN_LENGTH) {
+      setAlert(`Password is must be at least ${DECK_MIN_LENGTH} character`);
       return;
     }
-    const { email, password } = data;
-    await register(email, password);
+
+    await register(email.trim(), password.trim());
   };
 
   return (

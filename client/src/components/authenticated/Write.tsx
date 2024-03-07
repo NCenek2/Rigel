@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import useMode from "../../hooks/useMode";
 import { Card } from "../../contexts/DeckContext";
+import { useAlert } from "../../hooks/useAlert";
 const Write = () => {
   const { exitSession, cards, setCards } = useMode();
+  const { setAlert } = useAlert();
 
   // Index keeps index of the card
   const [index, setIndex] = useState(0);
@@ -50,8 +52,10 @@ const Write = () => {
   };
 
   const handleNextTerm = () => {
-    if (wrongData.length === 0 && index + 1 >= cards.length)
+    if (wrongData.length === 0 && index + 1 >= cards.length) {
+      setAlert("You finished!", "success");
       return exitSession();
+    }
     setIndex((prevIndex) => {
       if (prevIndex + 1 >= cards.length) {
         setCards(() => {

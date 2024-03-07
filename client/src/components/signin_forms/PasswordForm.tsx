@@ -1,4 +1,5 @@
 import React from "react";
+import { DECK_MIN_LENGTH } from "../../constants";
 
 type PasswordData = {
   password: string;
@@ -19,7 +20,7 @@ export function PasswordForm({ password, updateFields }: PasswordDataProps) {
         type="password"
         className="form-control mb-2"
         required={true}
-        minLength={10}
+        minLength={DECK_MIN_LENGTH}
         value={password}
         onChange={(e) => updateFields({ password: e.target.value })}
       />

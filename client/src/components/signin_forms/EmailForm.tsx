@@ -1,4 +1,5 @@
 import React from "react";
+import { EMAIL_MAX_LENGTH } from "../../constants";
 
 type EmailData = {
   email: string;
@@ -19,6 +20,7 @@ export function EmailForm({ email, updateFields }: EmailDataProps) {
         type="email"
         className="form-control mb-2 signup-input"
         required={true}
+        maxLength={EMAIL_MAX_LENGTH}
         value={email}
         onChange={(e) => updateFields({ email: e.target.value })}
       />

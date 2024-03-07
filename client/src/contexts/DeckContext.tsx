@@ -9,6 +9,7 @@ import React, {
 import { useNavigate, useLocation } from "react-router";
 import useAxiosPrivate from "../hooks/useAxiosPrivate";
 import useHandleError from "../hooks/useHandleError";
+import { ROUTE_PREFIX } from "../constants";
 
 type ViewDecksResponse = {
   user_id: number;
@@ -101,7 +102,10 @@ const useDeckContext = () => {
         setDecks(organizeData(decksReponse.data, deckInfoReponse.data));
       } catch (err) {
         handleError(err);
-        navigate("/login", { state: { from: location }, replace: true });
+        navigate(`${ROUTE_PREFIX}/login`, {
+          state: { from: location },
+          replace: true,
+        });
       }
     };
 
