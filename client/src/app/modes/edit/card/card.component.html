@@ -1,0 +1,21 @@
+<article class="card edit-flashcard-container">
+  <label for="term">Term: </label>
+  <input
+    id="term"
+    [(ngModel)]="term"
+    class="quizlet-inputs"
+    [maxlength]="cardTermLength"
+    (input)="handleChange($event)"
+  />
+  <br />
+  <label for="definition">Definition: </label>
+  <textarea
+    id="definition"
+    [(ngModel)]="definition"
+    class="edit-flashcard-definition quizlet-inputs"
+    [maxlength]="cardDefinitionLength"
+    (input)="handleChange($event)"
+  ></textarea>
+  <br />
+  <button class="btn btn-red" (click)="handleDelete()">Delete</button>
+</article>

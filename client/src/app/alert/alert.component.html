@@ -1,0 +1,17 @@
+<div
+  *ngIf="isAlertActive"
+  [class]="
+    'alert text-center alert-dismissible fade show alert-comp alert-' +
+    alertType
+  "
+  role="alert"
+>
+  {{ alert }}
+  <button
+    type="button"
+    class="btn-close"
+    data-bs-dismiss="alert"
+    aria-label="Close"
+    (click)="hideAlert()"
+  ></button>
+</div>

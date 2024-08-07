@@ -27,9 +27,6 @@ app.use(express.urlencoded());
 app.use(cookieParser());
 
 app.use(cors(corsOptions));
-// app.use("/auth", require("./routes/auth")(pool, app))
-// app.use("/decks", require("./routes/decks")(pool, app))
-// app.use("/deck", require("./routes/deck")(pool, app))
 require("./routes/auth")(pool, app);
 require("./routes/register")(pool, app);
 require("./routes/refresh")(app);
@@ -39,7 +36,11 @@ require("./routes/deck")(pool, app);
 
 const PORT = process.env.NODE_ENV || 8080;
 
-app.listen(PORT, () => console.log(`Server starting on PORT ${PORT}`));
+// const address = "192.168.1.25";
+const address = "127.0.0.1";
+app.listen(PORT, address, () =>
+  console.log(`Server starting on ${address}:${PORT}`)
+);
 
 // Handle server shutdown
 process.on("SIGINT", () => {

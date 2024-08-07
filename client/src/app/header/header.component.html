@@ -1,0 +1,93 @@
+<nav class="navbar navbar-dark header-color sticky-top">
+  <div class="container-fluid">
+    <a
+      class="navbar-brand"
+      routerLink="/"
+      routerLinkActive="router-link-active"
+    >
+      Rigel
+    </a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasDarkNavbar"
+      aria-controls="offcanvasDarkNavbar"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="offcanvas offcanvas-end sidebar-color"
+      tabIndex="-1"
+      id="offcanvasDarkNavbar"
+      aria-labelledby="offcanvasDarkNavbarLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasDarkNavbarLabel">Details</h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item">
+            <button class="nav-link" data-bs-dismiss="offcanvas">
+              <a
+                class="nav-link white-smoke"
+                aria-current="page"
+                routerLink="/"
+                routerLinkActive="router-link-active"
+              >
+                Home
+              </a>
+            </button>
+          </li>
+          @if (auth !== null) {
+          <li class="nav-item">
+            <button class="nav-link" data-bs-dismiss="offcanvas">
+              <a
+                class="nav-link white-smoke"
+                aria-current="page"
+                routerLink="/modes"
+                routerLinkActive="router-link-active"
+              >
+                Modes
+              </a>
+            </button>
+          </li>
+          }
+          <li class="nav-item">
+            @if (auth !== null) {
+            <button class="nav-link" data-bs-dismiss="offcanvas">
+              <a
+                class="nav-link white-smoke"
+                (click)="onLogout()"
+                routerLink="/login"
+                routerLinkActive="router-link-active"
+              >
+                Log Out
+              </a>
+            </button>
+
+            } @else {
+
+            <button class="nav-link" data-bs-dismiss="offcanvas">
+              <a
+                class="nav-link white-smoke"
+                routerLink="/login"
+                routerLinkActive="router-link-active"
+              >
+                Login
+              </a>
+            </button>
+            }
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>

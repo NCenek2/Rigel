@@ -1,0 +1,8 @@
+.login-container {
+  position: absolute;
+  color: whitesmoke;
+  z-index: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}

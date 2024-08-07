@@ -1,0 +1,34 @@
+<section class="studycards-container">
+  <button class="btn btn-outline-light add-deck" routerLink="../">Home</button>
+  @if (cards().length > 0) {
+  <article
+    class="card bg-light text-black studycard-container"
+    (click)="handleTerm()"
+  >
+    <p>Card: {{ index() + 1 }} / {{ cards().length }}</p>
+    @if (showTerm) {
+    <h2>{{ cards()[index()].term }}</h2>
+    } @else {
+    <p>{{ cards()[index()].definition }}</p>
+    }
+  </article>
+  <div class="studycards-buttons-container">
+    <button
+      class="studycards-button btn btn-outline-light"
+      (click)="prevCard()"
+    >
+      Prev
+    </button>
+    <button
+      class="studycards-button btn btn-outline-light"
+      (click)="nextCard()"
+    >
+      Next
+    </button>
+  </div>
+  } @else {
+  <article class="card bg-light text-black studycard-container">
+    Add Cards To Study
+  </article>
+  }
+</section>

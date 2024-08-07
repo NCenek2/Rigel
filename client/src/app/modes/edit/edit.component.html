@@ -1,0 +1,22 @@
+<section class="edit-flashcards-section">
+  <button class="btn btn-outline-light add-deck" routerLink="../">Home</button>
+  @if (this.cardsService.madeChanges()) {
+  <button class="btn add-color update-btn" (click)="update()">Update</button>
+  }
+  <input
+    class="edit-flashcards-title"
+    [(ngModel)]="deckTitle"
+    spellcheck="false"
+    [maxlength]="deckNameLength"
+    (input)="handleChange()"
+  />
+  <div
+    [class.edit-flashcards-container-single]="cards().length === 1"
+    [class.edit-flashcards-container]="cards().length !== 1"
+  >
+    @for (card of cards(); track card.card_id; let idx=$index) {
+    <app-card [card]="card" [card_index]="idx" />
+    }
+  </div>
+  <button class="btn add-color add-deck" (click)="add()">Add</button>
+</section>

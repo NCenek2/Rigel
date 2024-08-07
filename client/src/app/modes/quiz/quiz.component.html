@@ -1,0 +1,53 @@
+<section class="write-container">
+  <button class="btn btn-outline-light add-deck" routerLink="../">Home</button>
+  @if (cards().length > 0) {
+  <div class="write-count-term-container">
+    <p [class.last-index]="index === cards().length - 1">
+      {{ index + 1 }}/ {{ cards().length }}
+    </p>
+    <h3>
+      {{ cards()[index].term.substring(0, 49) }}
+    </h3>
+  </div>
+
+  @if (checkValue !== null) {
+  <button
+    class="btn add-color"
+    (click)="nextTerm()"
+    [disabled]="checkValue == null"
+  >
+    Next
+  </button>
+  }
+
+  <textarea
+    [(ngModel)]="answer"
+    class="write-textarea"
+    [class.pointer-events]="checkValue !== null"
+    [placeholder]="checkValue !== null ? placeholder : 'Type the Definition'"
+  ></textarea>
+  <div class="write-btn-container">
+    <button
+      class="btn write-btn"
+      [class.btn-green.pointer-events]="checkValue === true"
+      [class.btn-red]="checkValue === false"
+      [class.btn-outline-light]="checkValue === null"
+      (click)="check()"
+    >
+      Check
+    </button>
+    <button
+      class="btn btn-outline-light write-btn"
+      [class.pointer-events]="checkValue === null || checkValue === true"
+      (click)="overwrite()"
+      [disabled]="checkValue === null"
+    >
+      Overwrite
+    </button>
+  </div>
+  } @else {
+  <div class="write-count-term-container">
+    <p>Add Cards To Quiz Yourself</p>
+  </div>
+  }
+</section>

@@ -1,0 +1,40 @@
+<article class="deck-container bg-light text-black">
+  <h3 class="deck-title">
+    {{ deck.deck_name.substring(0, 25) }}
+  </h3>
+  <p class="deck-count">Cards: {{ deck.cards.length }}</p>
+  <div class="deck-button-container">
+    <button
+      class="btn deck-btn"
+      name="study"
+      [routerLink]="['..', 'study']"
+      (click)="setCurrentDeck()"
+    >
+      Study
+    </button>
+    <button
+      class="btn deck-btn"
+      name="quiz"
+      [routerLink]="['..', 'quiz']"
+      (click)="setCurrentDeck()"
+    >
+      Quiz
+    </button>
+    <button
+      class="btn deck-btn"
+      name="edit"
+      [routerLink]="['..', 'edit']"
+      (click)="setCurrentDeck()"
+    >
+      Edit
+    </button>
+    <button
+      class="btn deck-btn"
+      [class.deck-btn-delete]="deleteClicked"
+      name="delete"
+      (click)="deleteDeck()"
+    >
+      Delete
+    </button>
+  </div>
+</article>

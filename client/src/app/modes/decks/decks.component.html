@@ -1,0 +1,15 @@
+<section class="decks-container">
+  @if (decks().length > 0) { @for (deck of decks(); track deck.deck_id) {
+  <app-deck [deck]="deck" />
+  } } @else {
+  <h1 class="text-white text-center no-decks">No Decks</h1>
+  } @if (decks().length < 5) {
+  <button
+    type="button"
+    class="btn btn-dark add-color add-deck pos-rel"
+    (click)="createDeck()"
+  >
+    Add Deck
+  </button>
+  }
+</section>
