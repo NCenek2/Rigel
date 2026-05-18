@@ -11,7 +11,7 @@ const pool = new Pool({
   host: process.env.POSTGRES_HOST,
   database: process.env.POSTGRES_DATABASE,
   password: process.env.POSTGRES_PASSWORD,
-  port: 5432,
+  port: process.env.POSTGRES_PORT,
 });
 
 const corsOptions = {
@@ -39,7 +39,7 @@ const PORT = process.env.NODE_ENV || 8080;
 // const address = "192.168.1.25";
 const address = "127.0.0.1";
 app.listen(PORT, address, () =>
-  console.log(`Server starting on ${address}:${PORT}`)
+  console.log(`Server starting on ${address}:${PORT}`),
 );
 
 // Handle server shutdown
