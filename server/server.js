@@ -35,9 +35,9 @@ require("./routes/logout")(pool, app);
 require("./routes/decks")(pool, app);
 require("./routes/deck")(pool, app);
 
-const PORT = process.env.NODE_PORT || 8080;
+const PORT = process.env.NODE_PORT || 5000;
 
-const address = "localhost";
+const address = "0.0.0.0";
 app.listen(PORT, address, () =>
   console.log(`Server starting on ${address}:${PORT}`),
 );
