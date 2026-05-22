@@ -1,7 +1,16 @@
 services:
-  rigel-server:
-    build: ./
-    container_name: expressjs
+  client:
+    build: ./client
+    container_name: angular
+    ports:
+      - "4200:8080"
+    depends_on:
+      - server
+    networks:
+      - express-network
+
+  server:
+    build: ./server
     ports:
       - "5000:5000"
     depends_on:
@@ -17,7 +26,7 @@ services:
       POSTGRES_PASSWORD: password
     volumes:
       - rigel-data:/var/lib/postgresql/data
-      - ./postgres-init:/docker-entrypoint-initdb.d
+      - ./server/postgres-init:/docker-entrypoint-initdb.d
     networks:
       - express-network
 
