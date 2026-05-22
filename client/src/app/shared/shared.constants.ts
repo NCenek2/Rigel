@@ -1,3 +1,5 @@
+import { environment } from "../../environments/environment";
+
 export const CARD = {
   CARD_TERM_LENGTH: 30,
   CARD_DEFINITION_LENGTH: 150,
@@ -13,8 +15,8 @@ export const DECK = {
 };
 
 export const ROUTE = {
-  BASE_URL: 'http://localhost:8080',
-  ROUTE_PREFIX: '',
+  BASE_URL: environment.apiUrl,
+  ROUTE_PREFIX: "",
 };
 
 export const EMAIL = {
