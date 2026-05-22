@@ -7,11 +7,12 @@ const allowedOrigins = require("./config/allowedOrigins");
 require("dotenv").config();
 
 const pool = new Pool({
-  user: process.env.POSTGRES_USER,
-  host: process.env.POSTGRES_HOST,
-  database: process.env.POSTGRES_DATABASE,
-  password: process.env.POSTGRES_PASSWORD,
-  port: process.env.POSTGRES_PORT,
+  user: process.env.DB_USER,
+  host:
+    process.env.NODE_ENV === "production" ? process.env.DB_HOST : "localhost",
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
 });
 
 const corsOptions = {
@@ -34,10 +35,9 @@ require("./routes/logout")(pool, app);
 require("./routes/decks")(pool, app);
 require("./routes/deck")(pool, app);
 
-const PORT = process.env.NODE_ENV || 8080;
+const PORT = process.env.NODE_PORT || 8080;
 
-// const address = "192.168.1.25";
-const address = "127.0.0.1";
+const address = "localhost";
 app.listen(PORT, address, () =>
   console.log(`Server starting on ${address}:${PORT}`),
 );

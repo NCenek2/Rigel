@@ -1,0 +1,28 @@
+services:
+  expressjs:
+    build: ./
+    container_name: expressjs
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - express-network
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: rigel
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - rigel-data:/var/lib/postgresql/data
+    networks:
+      - express-network
+
+volumes:
+  rigel-data:
+
+networks:
+  express-network:
+    driver: bridge
