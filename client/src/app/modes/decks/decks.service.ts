@@ -1,17 +1,19 @@
-import { inject, Injectable, signal } from '@angular/core';
-import { Deck, useUpdateDecksProps } from './deck/deck.model';
-import { useAxiosPrivate } from '../../auth/axios/axios';
-import { AlertService } from '../../alert/alert.service';
-import { organizeDecks } from './decks.helper';
-import { Router } from '@angular/router';
-import { ROUTE } from '../../shared/shared.constants';
-import { AuthService } from '../../auth/auth.service';
+import { Injectable, signal } from "@angular/core";
+import { Router } from "@angular/router";
+import { AlertService } from "../../alert/alert.service";
+import { AuthService } from "../../auth/auth.service";
+import { useAxiosPrivate } from "../../auth/axios/axios";
+import { ROUTE } from "../../shared/shared.constants";
+import { Deck, useUpdateDecksProps } from "./deck/deck.model";
+import { organizeDecks } from "./decks.helper";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class DecksService {
-  private alertService = inject(AlertService);
-  private router = inject(Router);
-  private authService = inject(AuthService);
+  constructor(
+    private readonly alertService: AlertService,
+    private readonly router: Router,
+    private readonly authService: AuthService,
+  ) {}
 
   private decks = signal<Deck[]>([]);
   allDecks = this.decks.asReadonly();
@@ -19,12 +21,12 @@ export class DecksService {
   currentDeck: Deck | null = null;
 
   async createDeck() {
-    const deck_name = 'New Deck';
+    const deck_name = "New Deck";
     try {
       const axiosPrivate = useAxiosPrivate(this.authService.isAuthenticated());
       const response = await axiosPrivate({
-        url: '/decks',
-        method: 'post',
+        url: "/decks",
+        method: "post",
         data: { deck_name },
       });
 
@@ -44,8 +46,8 @@ export class DecksService {
     try {
       const axiosPrivate = useAxiosPrivate(this.authService.isAuthenticated());
       const response = await axiosPrivate({
-        url: '/decks',
-        method: 'delete',
+        url: "/decks",
+        method: "delete",
         data: { deck_id },
       });
       if (response?.status === 204) {
@@ -65,24 +67,24 @@ export class DecksService {
     const axiosPrivate = useAxiosPrivate(this.authService.isAuthenticated());
     const { deck_id, deck_name, deck_name_old } = deckData;
     const changeDeckNameOptions = {
-      url: '/decks',
-      method: 'put',
+      url: "/decks",
+      method: "put",
       data: { deck_id, deck_name },
     };
 
     const deleteDeckOptions = {
-      url: '/deck',
-      method: 'delete',
+      url: "/deck",
+      method: "delete",
       data: { deleted },
     };
     const updateDeckOptions = {
-      url: '/deck',
-      method: 'put',
+      url: "/deck",
+      method: "put",
       data: { updated },
     };
     const createDeckOptions = {
-      url: '/deck',
-      method: 'post',
+      url: "/deck",
+      method: "post",
       data: { created },
     };
 
@@ -117,8 +119,8 @@ export class DecksService {
     try {
       const axiosPrivate = useAxiosPrivate(this.authService.isAuthenticated());
       const [decksReponse, deckInfoReponse] = await Promise.all([
-        axiosPrivate.get('/decks'),
-        axiosPrivate.get('/decks/all'),
+        axiosPrivate.get("/decks"),
+        axiosPrivate.get("/decks/all"),
       ]);
       this.decks.set(organizeDecks(decksReponse.data, deckInfoReponse.data));
     } catch (err) {

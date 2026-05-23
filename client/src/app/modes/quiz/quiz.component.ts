@@ -1,29 +1,33 @@
-import { Component, inject, input, OnInit } from '@angular/core';
-import { DecksService } from '../decks/decks.service';
-import { AlertService } from '../../alert/alert.service';
-import { Card } from '../edit/card/card.model';
-import { ActivatedRoute, Router } from '@angular/router';
-import { CardsService } from '../cards.service';
+import { Component, OnInit } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { AlertService } from "../../alert/alert.service";
+import { CardsService } from "../cards.service";
+import { DecksService } from "../decks/decks.service";
+import { Card } from "../edit/card/card.model";
 
 @Component({
-  selector: 'app-quiz',
-  templateUrl: './quiz.component.html',
-  styleUrls: ['./quiz.component.css'],
+  selector: "app-quiz",
+  templateUrl: "./quiz.component.html",
+  styleUrls: ["./quiz.component.css"],
+  imports: [FormsModule, RouterLink],
 })
 export class QuizComponent implements OnInit {
+  constructor(
+    private readonly cardsService: CardsService,
+    private readonly decksService: DecksService,
+    private readonly alertService: AlertService,
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute,
+  ) {}
+
   checkValue: boolean | null = null;
   wrongData: Card[] = [];
   wrongDataSet = new Set<string>();
 
   index = 0;
-  placeholder = '';
-  answer = '';
-
-  cardsService = inject(CardsService);
-  decksService = inject(DecksService);
-  alertService = inject(AlertService);
-  router = inject(Router);
-  activatedRoute = inject(ActivatedRoute);
+  placeholder = "";
+  answer = "";
 
   cards = this.cardsService.cards;
 
@@ -33,8 +37,8 @@ export class QuizComponent implements OnInit {
 
   nextTerm() {
     if (this.wrongData.length === 0 && this.index + 1 >= this.cards().length) {
-      this.alertService.setAlert('You finished!', 'success');
-      this.router.navigate(['../'], {
+      this.alertService.setAlert("You finished!", "success");
+      this.router.navigate(["../"], {
         relativeTo: this.activatedRoute,
       });
       return;
@@ -54,19 +58,19 @@ export class QuizComponent implements OnInit {
   }
 
   private cardReset() {
-    this.answer = '';
+    this.answer = "";
     this.checkValue = null;
-    this.placeholder = '';
+    this.placeholder = "";
   }
 
   overwrite() {
     this.wrongData = this.wrongData.filter(
       (prevWrongValue) =>
-        prevWrongValue.card_id !== this.cards()[this.index].card_id
+        prevWrongValue.card_id !== this.cards()[this.index].card_id,
     );
 
     this.checkValue = true;
-    this.answer = '';
+    this.answer = "";
     this.placeholder = `Overwritten to ${this.cards()[this.index].definition}`;
   }
 
@@ -78,16 +82,16 @@ export class QuizComponent implements OnInit {
 
     let mySet = new Set<string>();
     let unWanted = new Set([
-      'the',
-      'an',
-      'at',
-      'so',
-      'is',
-      'are',
-      'of',
-      'and',
-      'in',
-      'there',
+      "the",
+      "an",
+      "at",
+      "so",
+      "is",
+      "are",
+      "of",
+      "and",
+      "in",
+      "there",
     ]);
 
     for (let item of matched) {
@@ -107,7 +111,7 @@ export class QuizComponent implements OnInit {
     let correctGuess = true;
 
     const countCorrect = new Set(
-      [...definitionSet].filter((item) => userSet.has(item))
+      [...definitionSet].filter((item) => userSet.has(item)),
     ).size;
 
     // Current card properties
@@ -115,9 +119,9 @@ export class QuizComponent implements OnInit {
     let message = `Yours:\n${this.answer}\nActual:\n${definition}`;
 
     if (countCorrect === definitionSet.size) {
-      message = 'Perfect\n' + message;
+      message = "Perfect\n" + message;
     } else if (countCorrect >= Math.ceil(definitionSet.size * 0.6)) {
-      message = 'Correct\n' + message;
+      message = "Correct\n" + message;
     } else {
       correctGuess = false;
 
@@ -130,12 +134,12 @@ export class QuizComponent implements OnInit {
 
     if (correctGuess) {
       this.wrongData = this.wrongData.filter(
-        (wrongData) => wrongData.card_id !== card_id
+        (wrongData) => wrongData.card_id !== card_id,
       );
       this.wrongDataSet.delete(term);
     }
 
-    this.answer = '';
+    this.answer = "";
     this.placeholder = message;
     this.checkValue = correctGuess;
   }

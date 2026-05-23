@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { Alert } from './alert.model';
+import { Injectable, signal } from "@angular/core";
+import { Alert } from "./alert.model";
 // import { AuthService } from '../auth/auth.service';
 
 type ReturnError = {
@@ -7,19 +7,19 @@ type ReturnError = {
   statusCode: number;
 };
 
-@Injectable({ providedIn: 'root' })
+@Injectable({ providedIn: "root" })
 export class AlertService {
-  alertType: Alert = 'danger';
-  alert = '';
-  isAlertActive = false;
+  alertType = signal<Alert>("danger");
+  alert = signal("");
+  isAlertActive = signal(false);
   timeout: ReturnType<typeof setTimeout> | null = null;
 
   // constructor(private readonly authService: AuthService) {}
 
-  setAlert(alertMessage: string, alertType: Alert = 'danger') {
-    this.alert = alertMessage;
-    this.alertType = alertType;
-    this.isAlertActive = true;
+  setAlert(alertMessage: string, alertType: Alert = "danger") {
+    this.alert.set(alertMessage);
+    this.alertType.set(alertType);
+    this.isAlertActive.set(true);
     this.timeout = setTimeout(() => this.hideAlert(), 4000);
   }
 
@@ -27,12 +27,12 @@ export class AlertService {
     if (this.timeout !== null) {
       clearTimeout(this.timeout);
     }
-    this.alert = '';
-    this.isAlertActive = false;
+    this.alert.set("");
+    this.isAlertActive.set(false);
   }
 
   handleError(err: any): ReturnError {
-    let message = 'Error';
+    let message = "Error";
     let statusCode = 500;
 
     if (err?.response?.data?.message) {
@@ -49,7 +49,7 @@ export class AlertService {
       statusCode = err?.status;
     }
 
-    message ??= 'Error';
+    message ??= "Error";
     statusCode ??= 500;
 
     this.setAlert(message);

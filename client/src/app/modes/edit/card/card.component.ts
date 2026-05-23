@@ -1,28 +1,30 @@
-import { Component, inject, Input, input, OnInit } from '@angular/core';
-import { DecksService } from '../../decks/decks.service';
-import { CARD } from '../../../shared/shared.constants';
-import { CardsService } from '../../cards.service';
-import { Card } from './card.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, input, OnInit } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { CARD } from "../../../shared/shared.constants";
+import { CardsService } from "../../cards.service";
+import { Card } from "./card.model";
 
 @Component({
-  selector: 'app-card',
-  templateUrl: './card.component.html',
-  styleUrl: './card.component.css',
+  selector: "app-card",
+  templateUrl: "./card.component.html",
+  styleUrl: "./card.component.css",
+  imports: [FormsModule],
 })
 export class CardComponent implements OnInit {
-  decksService = inject(DecksService);
-  cardsService = inject(CardsService);
-  router = inject(Router);
-  activatedRoute = inject(ActivatedRoute);
+  constructor(
+    private readonly cardsService: CardsService,
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute,
+  ) {}
 
   card_index = input.required<number>();
   card = input.required<Card>();
 
   cardTermLength = CARD.CARD_TERM_LENGTH;
   cardDefinitionLength = CARD.CARD_DEFINITION_LENGTH;
-  term = '';
-  definition = '';
+  term = "";
+  definition = "";
 
   ngOnInit(): void {
     this.term = this.card().term;
@@ -69,9 +71,9 @@ export class CardComponent implements OnInit {
       this.cardsService.deletedSet.add(card_id);
     }
 
-    this.router.navigate(['./'], {
+    this.router.navigate(["./"], {
       relativeTo: this.activatedRoute,
-      onSameUrlNavigation: 'reload',
+      onSameUrlNavigation: "reload",
     });
   }
 }

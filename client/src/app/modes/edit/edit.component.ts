@@ -1,25 +1,30 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { DECK, CARD } from '../../shared/shared.constants';
-import { DecksService } from '../decks/decks.service';
-import { AlertService } from '../../alert/alert.service';
-import { CardsService } from '../cards.service';
-import { Card, NewCard } from './card/card.model';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, OnInit, signal } from "@angular/core";
+import { FormsModule } from "@angular/forms";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { AlertService } from "../../alert/alert.service";
+import { CARD, DECK } from "../../shared/shared.constants";
+import { CardsService } from "../cards.service";
+import { DecksService } from "../decks/decks.service";
+import { CardComponent } from "./card/card.component";
+import { Card, NewCard } from "./card/card.model";
 
 @Component({
-  selector: 'app-edit',
-  templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.css'],
+  selector: "app-edit",
+  templateUrl: "./edit.component.html",
+  styleUrls: ["./edit.component.css"],
+  imports: [FormsModule, CardComponent, RouterLink],
 })
 export class EditComponent implements OnInit {
-  decksService = inject(DecksService);
-  alertsService = inject(AlertService);
-  cardsService = inject(CardsService);
-  router = inject(Router);
-  activatedRoute = inject(ActivatedRoute);
+  constructor(
+    private readonly decksService: DecksService,
+    private readonly alertsService: AlertService,
+    public readonly cardsService: CardsService,
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute,
+  ) {}
 
-  deck_name_old = '';
-  deckTitle = signal('');
+  deck_name_old = "";
+  deckTitle = signal("");
   decks = this.decksService.allDecks();
 
   cards = this.cardsService.cards;
@@ -31,16 +36,16 @@ export class EditComponent implements OnInit {
   ngOnInit(): void {
     this.cardsService.reset();
     this.cardsService.setCards(this.decksService.currentDeck?.cards ?? []);
-    this.deckTitle.set(this.decksService.currentDeck?.deck_name ?? '');
+    this.deckTitle.set(this.decksService.currentDeck?.deck_name ?? "");
   }
 
   hasIncompleteCards() {
     const incompleteCards = this.cards().some(
-      (card) => card.term.trim() === '' || card.definition.trim() === ''
+      (card) => card.term.trim() === "" || card.definition.trim() === "",
     );
 
     if (incompleteCards) {
-      this.alertsService.setAlert('Card Term or Definitions cannot be empty');
+      this.alertsService.setAlert("Card Term or Definitions cannot be empty");
     }
     return incompleteCards;
   }
@@ -50,7 +55,7 @@ export class EditComponent implements OnInit {
 
     if (exceedsLength) {
       this.alertsService.setAlert(
-        `Deck name cannot exceed ${DECK.DECK_NAME_LENGTH} characters`
+        `Deck name cannot exceed ${DECK.DECK_NAME_LENGTH} characters`,
       );
     }
 
@@ -74,7 +79,7 @@ export class EditComponent implements OnInit {
       if (card.term.length > CARD.CARD_TERM_LENGTH) {
         cardLengthExceeded = true;
         this.alertsService.setAlert(
-          `Card with term '${card.term}' exceeds the term length of ${CARD.CARD_TERM_LENGTH} `
+          `Card with term '${card.term}' exceeds the term length of ${CARD.CARD_TERM_LENGTH} `,
         );
         break;
       }
@@ -82,7 +87,7 @@ export class EditComponent implements OnInit {
       if (card.definition.length > CARD.CARD_DEFINITION_LENGTH) {
         cardLengthExceeded = true;
         this.alertsService.setAlert(
-          `Card with term '${card.term}' exceeds the defintion length of ${CARD.CARD_DEFINITION_LENGTH} `
+          `Card with term '${card.term}' exceeds the defintion length of ${CARD.CARD_DEFINITION_LENGTH} `,
         );
         break;
       }
@@ -95,8 +100,8 @@ export class EditComponent implements OnInit {
     if (this.hasIncompleteCards()) return;
     let newCard: Card = {
       card_id: -1,
-      term: '',
-      definition: '',
+      term: "",
+      definition: "",
     };
 
     // For cases where we are patching from deleted cards
@@ -111,9 +116,9 @@ export class EditComponent implements OnInit {
 
     this.cardsService.madeChanges.set(true);
     this.cardsService.updateCards(newCard);
-    this.router.navigate(['./'], {
+    this.router.navigate(["./"], {
       relativeTo: this.activatedRoute,
-      onSameUrlNavigation: 'reload',
+      onSameUrlNavigation: "reload",
     });
   }
 

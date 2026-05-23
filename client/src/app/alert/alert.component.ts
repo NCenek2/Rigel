@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
-import { Alert } from './alert.model';
-import { AlertService } from './alert.service';
+import { Component } from "@angular/core";
+import { AlertService } from "./alert.service";
 
 @Component({
-  selector: 'app-alert',
-  templateUrl: './alert.component.html',
-  styleUrls: ['./alert.component.css'],
+  selector: "app-alert",
+  templateUrl: "./alert.component.html",
+  styleUrls: ["./alert.component.css"],
 })
 export class AlertComponent {
   constructor(private readonly alertService: AlertService) {}

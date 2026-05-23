@@ -1,19 +1,18 @@
-import { Component, inject, input, signal } from '@angular/core';
-import { DecksService } from '../decks/decks.service';
-import { Card } from '../edit/card/card.model';
+import { Component, input, signal } from "@angular/core";
+import { RouterLink } from "@angular/router";
+import { Card } from "../edit/card/card.model";
 
 @Component({
-  selector: 'app-study',
-  templateUrl: './study.component.html',
-  styleUrl: './study.component.css',
+  selector: "app-study",
+  templateUrl: "./study.component.html",
+  styleUrl: "./study.component.css",
+  imports: [RouterLink],
 })
 export class StudyComponent {
   showTerm = true;
 
   index = signal(0);
   cards = input.required<Card[]>();
-
-  decksService = inject(DecksService);
 
   prevCard() {
     if (this.index() - 1 < 0) return;

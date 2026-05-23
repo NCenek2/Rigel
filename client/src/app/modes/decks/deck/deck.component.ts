@@ -1,14 +1,16 @@
-import { Component, inject, input, Input } from '@angular/core';
-import { Deck } from './deck.model';
-import { DecksService } from '../decks.service';
+import { Component, Input } from "@angular/core";
+import { RouterLink } from "@angular/router";
+import { DecksService } from "../decks.service";
+import { Deck } from "./deck.model";
 
 @Component({
-  selector: 'app-deck',
-  templateUrl: './deck.component.html',
-  styleUrl: './deck.component.css',
+  selector: "app-deck",
+  templateUrl: "./deck.component.html",
+  styleUrl: "./deck.component.css",
+  imports: [RouterLink],
 })
 export class DeckComponent {
-  decksService = inject(DecksService);
+  constructor(private readonly decksService: DecksService) {}
 
   @Input({ required: true }) deck!: Deck;
 

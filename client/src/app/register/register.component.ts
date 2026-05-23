@@ -1,61 +1,79 @@
-import { Component, inject } from '@angular/core';
-import { EMAIL, PASSWORD } from '../shared/shared.constants';
-import { RegisterService } from './register.service';
-import { Register } from './register.model';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, signal } from "@angular/core";
+import {
+  email,
+  form,
+  FormField,
+  FormRoot,
+  maxLength,
+  minLength,
+  required,
+} from "@angular/forms/signals";
+import { EMAIL, PASSWORD } from "../shared/shared.constants";
+import { Register } from "./register.model";
+import { RegisterService } from "./register.service";
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css'],
+  selector: "app-register",
+  templateUrl: "./register.component.html",
+  styleUrls: ["./register.component.css"],
+  imports: [FormRoot, FormField],
 })
 export class RegisterComponent {
-  form = new FormGroup({
-    email: new FormControl('', {
-      validators: [
-        Validators.required,
-        Validators.email,
-        Validators.maxLength(EMAIL.EMAIL_MAX_LENGTH),
-      ],
-    }),
-    passwords: new FormGroup(
-      {
-        password: new FormControl('', {
-          validators: [
-            Validators.required,
-            Validators.minLength(PASSWORD.PASSWORD_MIN_LENGTH),
-          ],
-        }),
-        password2: new FormControl('', {
-          validators: [
-            Validators.required,
-            Validators.minLength(PASSWORD.PASSWORD_MIN_LENGTH),
-          ],
-        }),
-      },
-      {
-        validators: [],
-      }
-    ),
+  constructor(private readonly registerService: RegisterService) {}
+
+  registrationModel = signal({
+    email: "",
+    passwords: {
+      password: "",
+      password2: "",
+    },
   });
 
-  registerService = inject(RegisterService);
+  registrationForm = form(
+    this.registrationModel,
+    (schemaPath) => {
+      required(schemaPath.email, { message: "Email is required" });
+      email(schemaPath.email, {
+        message: "Please enter a valid email address",
+      });
+      maxLength(schemaPath.email, EMAIL.EMAIL_MAX_LENGTH, {
+        message: "Email is too long",
+      });
 
-  onSubmit() {
-    const { email, passwords } = this.form.value;
-    if (!email || !passwords) return;
+      required(schemaPath.passwords.password, {
+        message: "Primary password is needed",
+      });
+      minLength(schemaPath.passwords.password, PASSWORD.PASSWORD_MIN_LENGTH, {
+        message: `Password must be at least ${PASSWORD.PASSWORD_MIN_LENGTH} characters long`,
+      });
 
-    const { password, password2 } = passwords;
-    if (!password || !password2) return;
+      required(schemaPath.passwords.password2, {
+        message: "Secondary password is needed",
+      });
+      minLength(schemaPath.passwords.password2, PASSWORD.PASSWORD_MIN_LENGTH, {
+        message: `Password must be at least ${PASSWORD.PASSWORD_MIN_LENGTH} characters long`,
+      });
+    },
+    {
+      submission: {
+        action: async (field) => {
+          const { email, passwords } = field().value();
+          if (!email || !passwords) return;
 
-    if (this.form.invalid) return;
+          const { password, password2 } = passwords;
+          if (!password || !password2) return;
 
-    const registerData: Register = {
-      email,
-      password,
-      password2,
-    };
+          if (field().invalid()) return;
 
-    this.registerService.register(registerData);
-  }
+          const registerData: Register = {
+            email,
+            password,
+            password2,
+          };
+
+          this.registerService.register(registerData);
+        },
+      },
+    },
+  );
 }
