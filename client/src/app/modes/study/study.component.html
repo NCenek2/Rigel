@@ -1,34 +1,36 @@
 <section class="studycards-container">
   <button class="btn btn-outline-light add-deck" routerLink="../">Home</button>
-  @if (cards().length > 0) {
-  <article
-    class="card bg-light text-black studycard-container"
-    (click)="handleTerm()"
-  >
-    <p>Card: {{ index() + 1 }} / {{ cards().length }}</p>
-    @if (showTerm) {
-    <h2>{{ cards()[index()].term }}</h2>
-    } @else {
-    <p>{{ cards()[index()].definition }}</p>
-    }
-  </article>
-  <div class="studycards-buttons-container">
-    <button
-      class="studycards-button btn btn-outline-light"
-      (click)="prevCard()"
+  @if (cards.length > 0) {
+    <article
+      class="card bg-light text-black studycard-container"
+      (click)="handleTerm()"
     >
-      Prev
-    </button>
-    <button
-      class="studycards-button btn btn-outline-light"
-      (click)="nextCard()"
-    >
-      Next
-    </button>
-  </div>
+      <p>Card: {{ index() + 1 }} / {{ cards.length }}</p>
+      @if (showTerm) {
+        <h2>{{ cards[index()].term }}</h2>
+      } @else {
+        <p>{{ cards[index()].definition }}</p>
+      }
+    </article>
+    <div class="studycards-buttons-container">
+      <button
+        class="studycards-button btn btn-outline-light"
+        (click)="prevCard()"
+        [disabled]="index() == 0"
+      >
+        Prev
+      </button>
+      <button
+        class="studycards-button btn btn-outline-light"
+        (click)="nextCard()"
+        [disabled]="index() == cards.length - 1"
+      >
+        Next
+      </button>
+    </div>
   } @else {
-  <article class="card bg-light text-black studycard-container">
-    Add Cards To Study
-  </article>
+    <article class="card bg-light text-black studycard-container">
+      Add Cards To Study
+    </article>
   }
 </section>

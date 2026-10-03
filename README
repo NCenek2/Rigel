@@ -1,0 +1,11 @@
+# Running Locally
+
+# Currently, I am using postgres default user and password of postgres. Found in server/.env
+
+# I am using pgAdmin and created a database called rigel.
+
+# Running "C:\Program Files\PostgreSQL\16\bin\psql.exe" -U postgres -d rigel -f postgres-init/01-init.sql from my server directory
+
+# will create the database content. I am using PostgreSQL 16 and hardcoding the file path, but if you have psql on your path you could
+
+# just call psql in place.

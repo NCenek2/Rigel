@@ -14,8 +14,6 @@ export class AlertService {
   isAlertActive = signal(false);
   timeout: ReturnType<typeof setTimeout> | null = null;
 
-  // constructor(private readonly authService: AuthService) {}
-
   setAlert(alertMessage: string, alertType: Alert = "danger") {
     this.alert.set(alertMessage);
     this.alertType.set(alertType);

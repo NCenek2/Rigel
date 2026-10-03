@@ -1,9 +1,6 @@
 @if (isAlertActive()) {
   <div
-    [class]="
-      'alert text-center alert-dismissible fade show alert-comp alert-' +
-      alertType
-    "
+    [class]="'alert text-center fade show alert-comp alert-' + alertType()"
     role="alert"
   >
     {{ alert() }}
