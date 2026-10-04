@@ -1,9 +1,11 @@
 @if (isAlertActive()) {
   <div
-    [class]="'alert text-center fade show alert-comp alert-' + alertType()"
+    [class]="'alert text-center fade show alert-container alert-' + alertType()"
     role="alert"
   >
-    {{ alert() }}
+    <div class="alert-description">
+      {{ alert() }}
+    </div>
     <button
       type="button"
       class="btn-close"

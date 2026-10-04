@@ -1,0 +1,19 @@
+.quizlet-inputs {
+  color: #555555;
+  border: none;
+  border-radius: 0.25em;
+  padding: 0.25em 0.5em;
+}
+
+.card-container {
+  background: transparent;
+  box-shadow: 2px 2px 7px hsla(0, 0%, 100%, 2.5%);
+  border: none;
+  color: white;
+  padding: 0.5rem;
+}
+
+.card-definition {
+  color: #555555;
+  height: 10rem;
+}

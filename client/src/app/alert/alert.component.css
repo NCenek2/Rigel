@@ -1,0 +1,15 @@
+.alert-container {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  width: 100%;
+  max-width: 250px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.alert-description {
+  width: 100%;
+  text-align: center;
+}

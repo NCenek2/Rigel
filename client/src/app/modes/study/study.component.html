@@ -1,8 +1,8 @@
-<section class="studycards-container">
+<section class="study-mode-container">
   <button class="btn btn-outline-light add-deck" routerLink="../">Home</button>
   @if (cards.length > 0) {
     <article
-      class="card bg-light text-black studycard-container"
+      class="card bg-light text-black study-mode-card-container"
       (click)="handleTerm()"
     >
       <p>Card: {{ index() + 1 }} / {{ cards.length }}</p>
@@ -12,16 +12,16 @@
         <p>{{ cards[index()].definition }}</p>
       }
     </article>
-    <div class="studycards-buttons-container">
+    <div class="study-mode-card-buttons-container">
       <button
-        class="studycards-button btn btn-outline-light"
+        class="study-mode-card-button btn btn-outline-light"
         (click)="prevCard()"
         [disabled]="index() == 0"
       >
         Prev
       </button>
       <button
-        class="studycards-button btn btn-outline-light"
+        class="study-mode-card-button btn btn-outline-light"
         (click)="nextCard()"
         [disabled]="index() == cards.length - 1"
       >
@@ -29,8 +29,6 @@
       </button>
     </div>
   } @else {
-    <article class="card bg-light text-black studycard-container">
-      Add Cards To Study
-    </article>
+    <article class="card bg-light text-black">Add Cards To Study</article>
   }
 </section>

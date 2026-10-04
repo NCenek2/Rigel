@@ -1,4 +1,4 @@
-<article class="card edit-flashcard-container">
+<article class="card card-container">
   <label for="term">Term: </label>
   <input
     id="term"
@@ -12,7 +12,7 @@
   <textarea
     id="definition"
     [(ngModel)]="definition"
-    class="edit-flashcard-definition quizlet-inputs"
+    class="card-definition quizlet-inputs"
     [maxlength]="cardDefinitionLength"
     (input)="handleChange($event)"
   ></textarea>
