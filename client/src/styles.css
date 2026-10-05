@@ -180,6 +180,11 @@ body {
   z-index: 1;
 }
 
+.deck-btn:focus-visible {
+  outline: 2px solid rgb(28, 29, 29);
+  outline-offset: 2px;
+}
+
 .deck-btn:hover {
   background-color: hsl(220, 55%, 78%);
 }
