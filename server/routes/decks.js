@@ -5,28 +5,6 @@ module.exports = (pool, app) => {
   const BASE_URL = "/decks";
   pool.connect();
 
-  // READ ALL Data for user
-  app.get(`${BASE_URL}/all`, hasToken, async (req, res) => {
-    const id = req.user_id;
-    if (!id) return res.sendStatus(401);
-    const query = `SELECT
-          d.deck_id,
-          d.deck_name,
-          c.card_id,
-          c.term,
-          c.definition
-      FROM
-          decks d
-      JOIN
-          cards c ON d.deck_id = c.deck_id
-      WHERE
-          d.user_id = $1`;
-
-    const result = await pool.query(query, [id]);
-
-    res.json(result.rows);
-  });
-
   // READ Decks
   app.get(BASE_URL, hasToken, async (req, res) => {
     const id = req.user_id;
@@ -46,7 +24,6 @@ module.exports = (pool, app) => {
 
     const { deck_name } = req.body;
     if (!deck_name) return res.sendStatus(400);
-
 
     try {
       const query = `INSERT INTO decks (user_id, deck_name) VALUES ($1, $2)`;

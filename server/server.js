@@ -32,6 +32,7 @@ require("./routes/auth")(pool, app);
 require("./routes/register")(pool, app);
 require("./routes/refresh")(app);
 require("./routes/logout")(pool, app);
+require("./routes/cards")(pool, app);
 require("./routes/decks")(pool, app);
 require("./routes/deck")(pool, app);
 

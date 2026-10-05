@@ -25,7 +25,6 @@ export class EditComponent implements OnInit {
 
   deck_name_old = "";
   deckTitle = signal("");
-  decks = this.decksService.allDecks();
 
   cards = this.cardsService.cards;
 
@@ -34,9 +33,14 @@ export class EditComponent implements OnInit {
   cardDefinitionLength = CARD.CARD_DEFINITION_LENGTH;
 
   ngOnInit(): void {
-    this.cardsService.reset();
-    this.cardsService.setCards(this.decksService.currentDeck?.cards ?? []);
-    this.deckTitle.set(this.decksService.currentDeck?.deck_name ?? "");
+    const currentDeck = this.decksService.currentDeck;
+    if (!currentDeck) {
+      this.router.navigate(["/decks"]);
+      return;
+    }
+
+    this.cardsService.getDeckCards(currentDeck.deck_id);
+    this.deckTitle.set(currentDeck.deck_name);
   }
 
   hasIncompleteCards() {

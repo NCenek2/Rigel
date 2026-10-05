@@ -32,7 +32,13 @@ export class QuizComponent implements OnInit {
   cards = this.cardsService.cards;
 
   ngOnInit() {
-    this.cardsService.setCards(this.decksService.currentDeck?.cards ?? []);
+    const currentDeckId = this.decksService.currentDeck;
+    if (!currentDeckId) {
+      this.router.navigate(["/decks"]);
+      return;
+    }
+
+    this.cardsService.getDeckCards(currentDeckId.deck_id);
   }
 
   nextTerm() {

@@ -2,7 +2,6 @@ import { Routes } from "@angular/router";
 import { isAuthorized } from "./auth/auth.guard";
 import { HomeComponent } from "./home/home.component";
 import { LoginComponent } from "./login/login.component";
-import { resolveCards } from "./modes/edit/card/card.resolver";
 import { ModesComponent } from "./modes/modes.component";
 import { modesRoutes } from "./modes/modes.routes";
 import { NotFoundComponent } from "./not-found/not-found.component";
@@ -33,9 +32,6 @@ export const routes: Routes = [
     children: modesRoutes,
     runGuardsAndResolvers: "always",
     canMatch: [isAuthorized],
-    resolve: {
-      cards: resolveCards,
-    },
   },
   {
     path: "**",

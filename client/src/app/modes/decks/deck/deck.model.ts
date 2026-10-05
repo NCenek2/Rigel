@@ -1,9 +1,9 @@
-import { Card, NewCard } from '../../edit/card/card.model';
+import { Card, NewCard } from "../../edit/card/card.model";
 
 export type Deck = {
   deck_id: number;
   deck_name: string;
-  cards: Card[];
+  user_id: number;
 };
 
 type DeckDataInfo = {

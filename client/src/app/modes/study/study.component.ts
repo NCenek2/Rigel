@@ -1,5 +1,6 @@
-import { Component, signal } from "@angular/core";
-import { RouterLink } from "@angular/router";
+import { Component, OnInit, signal } from "@angular/core";
+import { Router, RouterLink } from "@angular/router";
+import { CardsService } from "../cards.service";
 import { DecksService } from "../decks/decks.service";
 
 @Component({
@@ -8,13 +9,27 @@ import { DecksService } from "../decks/decks.service";
   styleUrl: "./study.component.css",
   imports: [RouterLink],
 })
-export class StudyComponent {
+export class StudyComponent implements OnInit {
   showTerm = true;
 
-  constructor(private readonly decksService: DecksService) {}
+  constructor(
+    private readonly decksService: DecksService,
+    private readonly router: Router,
+    private readonly cardsService: CardsService,
+  ) {}
+
+  ngOnInit(): void {
+    const currentDeckId = this.decksService.currentDeck;
+    if (!currentDeckId) {
+      this.router.navigate(["/decks"]);
+      return;
+    }
+
+    this.cardsService.getDeckCards(currentDeckId.deck_id);
+  }
 
   index = signal(0);
-  cards = this.decksService.currentDeck?.cards ?? [];
+  cards = this.cardsService.cards;
 
   prevCard() {
     if (this.index() - 1 < 0) return;

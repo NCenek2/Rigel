@@ -3,9 +3,7 @@ import { Router } from "@angular/router";
 import { AlertService } from "../../alert/alert.service";
 import { AuthService } from "../../auth/auth.service";
 import { useAxiosPrivate } from "../../auth/axios/axios";
-import { ROUTE } from "../../shared/shared.constants";
 import { Deck, useUpdateDecksProps } from "./deck/deck.model";
-import { organizeDecks } from "./decks.helper";
 
 @Injectable({ providedIn: "root" })
 export class DecksService {
@@ -15,10 +13,25 @@ export class DecksService {
     private readonly authService: AuthService,
   ) {}
 
-  private decks = signal<Deck[]>([]);
-  allDecks = this.decks.asReadonly();
+  private _decks = signal<Deck[]>([]);
+  decks = this._decks.asReadonly();
 
   currentDeck: Deck | null = null;
+
+  async getDecks() {
+    try {
+      const axiosPrivate = useAxiosPrivate(this.authService.isAuthenticated());
+      const response = await axiosPrivate({
+        url: "/decks",
+        method: "get",
+      });
+
+      const decks = response.data as Deck[];
+      this._decks.set(decks ?? []);
+    } catch (err) {
+      this.alertService.handleError(err);
+    }
+  }
 
   async createDeck() {
     const deck_name = "New Deck";
@@ -102,14 +115,7 @@ export class DecksService {
     try {
       if (promiseArray.length === 0) return;
 
-      const response = await Promise.all(promiseArray);
-      if (
-        response[0]?.status === 200 ||
-        response[0]?.status === 201 ||
-        response[0]?.status === 204
-      ) {
-        this.refresh();
-      }
+      await Promise.all(promiseArray);
     } catch (err) {
       this.alertService.handleError(err);
     }
@@ -117,17 +123,9 @@ export class DecksService {
 
   public async refresh() {
     try {
-      const axiosPrivate = useAxiosPrivate(this.authService.isAuthenticated());
-      const [decksReponse, deckInfoReponse] = await Promise.all([
-        axiosPrivate.get("/decks"),
-        axiosPrivate.get("/decks/all"),
-      ]);
-      this.decks.set(organizeDecks(decksReponse.data, deckInfoReponse.data));
+      await this.getDecks();
     } catch (err) {
       this.alertService.handleError(err);
-      this.router.navigate([`${ROUTE.ROUTE_PREFIX}/login`], {
-        replaceUrl: true,
-      });
     }
   }
 }
