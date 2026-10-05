@@ -11,8 +11,8 @@ import { AuthService } from "../auth/auth.service";
 export class HeaderComponent {
   constructor(private readonly authService: AuthService) {}
 
-  get auth() {
-    return this.authService.isAuthenticated();
+  get authenticated() {
+    return this.authService.isAuthenticated() !== null;
   }
 
   onLogout() {
